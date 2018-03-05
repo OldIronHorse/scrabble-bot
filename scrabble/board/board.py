@@ -1,7 +1,7 @@
 from scrabble import InvalidTilePlacementError
 
 def new_board():
-  return ['               ' for i in range (0, 15)]
+  return tuple('               ' for i in range (0, 15))
 
 def add_horizontal(board, start, word):
   row_index, col_index = start
@@ -19,7 +19,7 @@ def add_horizontal(board, start, word):
       new_row += w
     else:
       raise InvalidTilePlacementError
-  return board[:row_index] + [new_row] + board[row_index + 1:]
+  return board[:row_index] + (new_row,) + board[row_index + 1:]
 
 def add_vertical(board, start, word):
   row_index, col_index = start

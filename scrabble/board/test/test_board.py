@@ -21,9 +21,11 @@ class TestAddHorizontal(TestCase):
     
   def test_add_horizontal_valid_intersect(self):
     starting_board = new_board()
-    starting_board[4] = '      d        '
-    starting_board[5] = '      o        '
-    starting_board[6] = '      g        '
+    starting_board = starting_board[:4] \
+                    + ('      d        ',
+                       '      o        ',
+                       '      g        ') \
+                    + starting_board[7:]
     b = add_horizontal(starting_board, (5, 3), "rem ve")
     for row_index in (i for i in range(0, 15) if i not in [4, 5,6]):
       self.assertEqual('               ', b[row_index])
@@ -34,9 +36,11 @@ class TestAddHorizontal(TestCase):
 
   def test_add_horizontal_invalid_intersect(self):
     starting_board = new_board()
-    starting_board[4] = '      d        '
-    starting_board[5] = '      o        '
-    starting_board[6] = '      g        '
+    starting_board = starting_board[:4]\
+                    + ('      d        ',
+                       '      o        ',
+                       '      g        ') \
+                    + starting_board[7:]
     with self.assertRaises(InvalidTilePlacementError):
       add_horizontal(starting_board, (5, 3), "remove")
 
@@ -62,7 +66,9 @@ class TestAddVertical(TestCase):
 
   def test_add_vertical_valid_inertsect(self):
     starting_board = new_board()
-    starting_board[5] = '   remove      '
+    starting_board = starting_board[:5] \
+                    + ('   remove      ',) \
+                    + starting_board[6:]
     b = add_vertical(starting_board, (4, 6), "d g")
     for row_index in (i for i in range(0, 15) if i not in [4, 5,6]):
       self.assertEqual('               ', b[row_index])
@@ -73,7 +79,9 @@ class TestAddVertical(TestCase):
 
   def test_add_vertical_invalid_intersect(self):
     starting_board = new_board()
-    starting_board[5] = '   remove      '
+    starting_board = starting_board[:5] \
+                    + ('   remove      ',) \
+                    + starting_board[6:]
     with self.assertRaises(InvalidTilePlacementError):
       add_vertical(starting_board, (4, 6), "dog")
 
