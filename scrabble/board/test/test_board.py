@@ -19,7 +19,7 @@ class TestAddHorizontal(TestCase):
     self.assertEqual('   remove      ', b[5])
     self.assertNotEqual(starting_board, b)
     
-  def test_add_horizontal_valid_intsect(self):
+  def test_add_horizontal_valid_intersect(self):
     starting_board = new_board()
     starting_board[4] = '      d        '
     starting_board[5] = '      o        '
@@ -59,3 +59,25 @@ class TestAddVertical(TestCase):
     for row_index in (i for i in range(0, 15) if i not in range(5, 11)):
       self.assertEqual('               ', b[row_index])
     self.assertNotEqual(starting_board, b)
+
+  def test_add_vertical_valid_inertsect(self):
+    starting_board = new_board()
+    starting_board[5] = '   remove      '
+    b = add_vertical(starting_board, (4, 6), "d g")
+    for row_index in (i for i in range(0, 15) if i not in [4, 5,6]):
+      self.assertEqual('               ', b[row_index])
+    self.assertEqual('      d        ', b[4])
+    self.assertEqual('   remove      ', b[5])
+    self.assertEqual('      g        ', b[6])
+    self.assertNotEqual(starting_board, b)
+
+  def test_add_vertical_invalid_intersect(self):
+    starting_board = new_board()
+    starting_board[5] = '   remove      '
+    with self.assertRaises(InvalidTilePlacementError):
+      add_vertical(starting_board, (4, 6), "dog")
+
+  def test_add_vertical_invalid_off_board(self):
+    starting_board = new_board()
+    with self.assertRaises(InvalidTilePlacementError):
+      add_vertical(starting_board, (12, 5), "remove")

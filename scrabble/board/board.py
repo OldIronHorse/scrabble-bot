@@ -26,6 +26,8 @@ def add_vertical(board, start, word):
   word_as_col = ''.join([' ' for i in range(0, row_index)] \
                         + [word] \
                         + [' ' for i in range(row_index + len(word), 15)])
+  if len(word_as_col) > 15:
+    raise InvalidTilePlacementError
   new_board = []
   for r in range(0, 15):
     if word_as_col[r] == ' ':
