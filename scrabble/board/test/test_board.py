@@ -1,5 +1,5 @@
 from unittest import TestCase
-from scrabble.board import new_board, add_horizontal
+from scrabble.board import new_board, add_horizontal, add_vertical
 from scrabble import InvalidTilePlacementError
 
 class TestNewBoard(TestCase):
@@ -45,3 +45,17 @@ class TestAddHorizontal(TestCase):
     with self.assertRaises(InvalidTilePlacementError):
       add_horizontal(starting_board, (5, 12), "remove")
 
+
+class TestAddVertical(TestCase):
+  def test_add_vertical_valid_empty_board(self):
+    starting_board = new_board()
+    b = add_vertical(starting_board, (5, 3), "remove")
+    self.assertEqual('   r           ', b[5])
+    self.assertEqual('   e           ', b[6])
+    self.assertEqual('   m           ', b[7])
+    self.assertEqual('   o           ', b[8])
+    self.assertEqual('   v           ', b[9])
+    self.assertEqual('   e           ', b[10])
+    for row_index in (i for i in range(0, 15) if i not in range(5, 11)):
+      self.assertEqual('               ', b[row_index])
+    self.assertNotEqual(starting_board, b)

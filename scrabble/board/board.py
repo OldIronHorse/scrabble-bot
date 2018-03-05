@@ -20,3 +20,20 @@ def add_horizontal(board, start, word):
     else:
       raise InvalidTilePlacementError
   return board[:row_index] + [new_row] + board[row_index + 1:]
+
+def add_vertical(board, start, word):
+  row_index, col_index = start
+  word_as_col = ''.join([' ' for i in range(0, row_index)] \
+                        + [word] \
+                        + [' ' for i in range(row_index + len(word), 15)])
+  new_board = []
+  for r in range(0, 15):
+    if word_as_col[r] == ' ':
+      new_board.append(board[r])
+    elif board[r][col_index] == ' ':
+      new_board.append(board[r][:col_index] \
+                + word_as_col[r] \
+                + board[r][col_index + 1:])
+    else:
+      raise InvalidTilePlacementError
+  return new_board
