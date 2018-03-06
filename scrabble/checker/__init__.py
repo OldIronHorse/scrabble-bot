@@ -1,1 +1,1 @@
-from .checker import get_words
+from .checker import get_words, is_valid_arrangement
