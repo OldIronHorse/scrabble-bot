@@ -22,5 +22,17 @@ def is_valid_arrangement(board):
     return True
   if board[7][7] == ' ':
     return False
-  #TODO: check contiguous
-  return True
+  tiles = set()
+  for row in range(0,15):
+    for col in range(0,15):
+      if board[row][col] != ' ':
+        tiles.add((row, col))
+  check_contiguous((7,7), tiles)
+  return not tiles
+
+def check_contiguous(tile, tiles):
+  tiles.remove(tile)
+  row, col = tile
+  for t in [(row + 1, col), (row - 1, col), (row, col + 1), (row, col -1)]:
+    if t in tiles:
+      check_contiguous(t, tiles)
