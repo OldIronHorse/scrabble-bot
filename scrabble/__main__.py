@@ -1,36 +1,8 @@
 import time
-from collections import namedtuple
-from itertools import cycle, permutations
-from functools import reduce
+from itertools import cycle
+from scrabble.board import new_board
 from scrabble.tiles import shake, new_bag
-from scrabble.board import new_board, add_horizontal
-from scrabble.checker import scowl_35
-from scrabble.scorer import score_move
-
-#TODO: wordtree as alternative to brute force
-#TODO: blank tile support
-
-def basic(game, player):
-  if game['board'] == new_board():
-    # first move
-    print(player)
-    candidate_words = {word for word in {''.join(w) for w in reduce(lambda acc, l: acc + list(l), (permutations(player['tiles'], n) for n in range(2, len(player['tiles']) + 1)), [])} if word in scowl_35()}
-    print(candidate_words)
-    candidate_moves = [(word, board, score_move(game['board'], board)) 
-                        for word, board in
-                        [(word, add_horizontal(game['board'], 
-                                               (7, 8 - len(word)), 
-                                               word))
-                         for word in candidate_words]]
-    word, board, score  = \
-      reduce(lambda best, move: move if move[2] > best[2] else best,
-             candidate_moves)
-    print(word, score)
-    game['board'] = board
-    tiles = list(player['tiles'])
-    for l in word:
-      tiles.remove(l)
-    player['tiles'] = ''.join(tiles)
+from scrabble.strategies import basic
 
 def print_board(board):
   for row in board:

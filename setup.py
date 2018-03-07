@@ -12,7 +12,7 @@ setup(
   license='GPL 3.0',
   packages=['scrabble'],
   include_package_data=True,
-  install_requires=[],
+  install_requires=['word-tree'],
   test_suite='nose.collector',
   tests_require=['nose'],
   zip_safe=False)
