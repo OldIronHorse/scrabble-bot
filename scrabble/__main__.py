@@ -4,7 +4,7 @@ from functools import partial
 from scrabble.board import new_board, add_horizontal, add_vertical
 from scrabble.scorer import score_move
 from scrabble.tiles import shake, new_bag
-from scrabble.strategies import basic
+from scrabble.strategies import whole_words, whole_sequence
 from scrabble.checker import scowl, is_valid_arrangement, get_words
 
 def print_board(board):
@@ -31,14 +31,28 @@ players = [{
     'name': 'Player1',
     'tiles': '',
     'score': 0,
-    'strategy': partial(basic, scowl(35)),
+    'strategy': partial(whole_words, scowl(35)),
     'time': 0,
     'words': [],
   },{
     'name': 'Player2',
     'tiles': '',
     'score': 0,
-    'strategy': partial(basic, scowl(35)),
+    'strategy': partial(whole_words, scowl(35)),
+    'time': 0,
+    'words': [],
+  },{
+    'name': 'Player3',
+    'tiles': '',
+    'score': 0,
+    'strategy': partial(whole_words, scowl(35)),
+    'time': 0,
+    'words': [],
+  },{
+    'name': 'Player4',
+    'tiles': '',
+    'score': 0,
+    'strategy': partial(whole_words, scowl(35)),
     'time': 0,
     'words': [],
   },
@@ -84,7 +98,6 @@ actions = {
 action_history = []
 
 for player in cycle(players):
-  print_board(game['board'])
   draw(game, player)
   print_player(player)
   start = time.time()
@@ -94,14 +107,14 @@ for player in cycle(players):
   print(action, params)
   actions[action](game, player, params)
   print_board(game['board'])
-  print_player(player)
   print('bag:', ''.join(sorted(game['bag'])))
   #input('Press Enter to continue...')
-  if action_history[len(action_history) - 3:] == \
-      ['exchange_tiles', 'exchange_tiles', 'exchange_tiles'] \
+  if action_history[len(action_history) - (2 * len(players)):] == \
+      ['exchange_tiles'] * 2 * len(players) \
       or (not game['bag'] and not player['tiles']):
     for player in players:
       print_player(player)
       print(player['words'])
+    print(get_words(game['board']))
     break;
 

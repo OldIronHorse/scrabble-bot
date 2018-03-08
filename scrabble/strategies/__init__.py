@@ -1,1 +1,1 @@
-from .basic import basic
+from .basic import whole_words, whole_sequence
