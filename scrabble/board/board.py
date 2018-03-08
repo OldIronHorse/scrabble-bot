@@ -40,4 +40,4 @@ def add_vertical(board, start, word):
                 + board[r][col_index + 1:])
     else:
       raise InvalidTilePlacementError
-  return new_board
+  return tuple(new_board)
