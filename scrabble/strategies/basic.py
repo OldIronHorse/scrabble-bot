@@ -1,16 +1,21 @@
 from itertools import permutations
 from functools import reduce
 from scrabble.board import new_board, add_horizontal, add_vertical
-from scrabble.checker import scowl_35, is_valid_arrangement, get_words
+from scrabble.checker import is_valid_arrangement, get_words
 from scrabble.scorer import score_move
 from scrabble import InvalidTilePlacementError
 #TODO: wordtree as alternative to brute force
 #TODO: blank tile support
 
-def basic(board0, tiles):
+def basic(wordset, board0, tiles):
   if board0 == new_board():
     # first move
-    candidate_words = {word for word in {''.join(w) for w in reduce(lambda acc, l: acc + list(l), (permutations(tiles, n) for n in range(2, len(tiles) + 1)), [])} if word in scowl_35()}
+    candidate_words = {word for word 
+                       in {''.join(w) for w 
+                           in reduce(lambda acc, l: acc + list(l), 
+                                     (permutations(tiles, n) for n 
+                                      in range(2, len(tiles) + 1)), [])} 
+                       if word in wordset}
     candidate_moves = [(word, board, score_move(board0, board)) 
                         for word, board in
                         [(word, add_horizontal(board0, 
@@ -23,7 +28,12 @@ def basic(board0, tiles):
     return ('add_horizontal', ((7, 8 - len(word)), word))
   # Not an empty board
   # whole words
-  candidate_words = {word for word in {''.join(w) for w in reduce(lambda acc, l: acc + list(l), (permutations(tiles, n) for n in range(1, len(tiles) + 1)), [])} if word in scowl_35()}
+  candidate_words = {word for word 
+                     in {''.join(w) for w 
+                         in reduce(lambda acc, l: acc + list(l), 
+                                   (permutations(tiles, n) for n 
+                                    in range(1, len(tiles) + 1)), [])}
+                     if word in wordset}
   candidate_moves = []
   for r in range(0, 15):
     for c in range(0, 15):
@@ -44,7 +54,7 @@ def basic(board0, tiles):
   candidate_moves = [(word, start, action, board, score_move(board0, board)) 
                       for word, start, action, board 
                       in candidate_moves 
-                      if get_words(board).issubset(scowl_35())]
+                      if get_words(board).issubset(wordset)]
   try:
     word, start, action, board, score = \
         reduce(lambda best, move: move if move[3] > best[3] else best, 

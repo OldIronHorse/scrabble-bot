@@ -1,8 +1,11 @@
-def scowl_35():
-  global g_scowl_35
-  if not g_scowl_35:
-    with open('scrabble/checker/scowl_35.lst', 'r', encoding='ISO-8859-1') as f:
-      g_scowl_35 = {w.strip() for w in f.readlines()}
-  return g_scowl_35
+scowls = {}
 
-g_scowl_35 = None
+def scowl(size):
+  try:
+    return scowls[size]
+  except KeyError:
+    with open('scrabble/checker/scowl_{}.lst'.format(size), 
+        'r', encoding='ISO-8859-1') as f:
+      scowls[size] = {w.strip() for w in f.readlines()}
+    return scowls[size]
+

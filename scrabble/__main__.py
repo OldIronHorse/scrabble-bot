@@ -1,18 +1,19 @@
 import time
 from itertools import cycle
+from functools import partial
 from scrabble.board import new_board, add_horizontal, add_vertical
 from scrabble.scorer import score_move
 from scrabble.tiles import shake, new_bag
 from scrabble.strategies import basic
-from scrabble.checker import scowl_35, is_valid_arrangement, get_words
+from scrabble.checker import scowl, is_valid_arrangement, get_words
 
 def print_board(board):
   for row in board:
     print(row)
 
 def print_player(player):
-  print('{} [{}] {:.6f}s {}'.format(player['name'], player['score'], 
-      player['time'], player['tiles']))
+  print('{} {} [{}] {:.6f}s {}'.format(player['name'], len(player['words']),
+        player['score'], player['time'], player['tiles']))
 
 def draw(game, player):
   game['bag'] = shake(game['bag'])
@@ -30,20 +31,22 @@ players = [{
     'name': 'Player1',
     'tiles': '',
     'score': 0,
-    'strategy': basic,
+    'strategy': partial(basic, scowl(35)),
     'time': 0,
+    'words': [],
   },{
     'name': 'Player2',
     'tiles': '',
     'score': 0,
-    'strategy': basic,
+    'strategy': partial(basic, scowl(35)),
     'time': 0,
+    'words': [],
   },
 ]
 
 def update_game_player(game, player, board, word):
   if not is_valid_arrangement(board) \
-      or not get_words(board).issubset(scowl_35()):
+      or not get_words(board).issubset(scowl(80)):
     raise InvalidMoveError
   player['score'] += score_move(game['board'], board)
   game['board'] = board
@@ -51,6 +54,7 @@ def update_game_player(game, player, board, word):
   for l in word:
     tiles.remove(l)
   player['tiles'] = ''.join(tiles)
+  player['words'].append(word)
 
 def action_add_horizontal(game, player, params):
   start, word = params
@@ -98,5 +102,6 @@ for player in cycle(players):
       or (not game['bag'] and not player['tiles']):
     for player in players:
       print_player(player)
+      print(player['words'])
     break;
 
