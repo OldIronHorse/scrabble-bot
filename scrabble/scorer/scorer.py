@@ -88,23 +88,23 @@ def get_words_and_squares_from_rows(board, available_squares):
 
 def score_move(board0, board1):
   #[('dog', ' d '),....]
-  #TODO: exclude squares that weren't covered in this move
   available_squares = [[s if t == ' ' else ' ' for t, s in row] for row
                        in (zip(rb, rs) for rb, rs
                            in zip(board0, squares))]
   words_squares0 = get_words_and_squares(board0, available_squares)
   words_squares1 = get_words_and_squares(board1, available_squares)
   for ws in words_squares0:
-    words_squares1.remove(ws)
+    try:
+      words_squares1.remove(ws)
+    except ValueError:
+      pass
   score = 0
-  print(words_squares1)
   for word, sqs in words_squares1:
     word_score = 0
     word_multiplier = 1
     for l, s in zip(word, sqs):
       word_multiplier *= word_multipliers[s]
       word_score += (points[l] * letter_multipliers[s])
-      print(l,s,word_score, word_multiplier)
     word_score *= word_multiplier
     score += word_score
   return score
