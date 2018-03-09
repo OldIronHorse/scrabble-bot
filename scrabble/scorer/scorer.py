@@ -27,10 +27,46 @@ points = {
   'x': 8,
   'y': 4,
   'z': 10,
+  ' ': 0,
 }
 
 def score_word(word):
   return sum([points[l] for l in word])
 
+multipliers = {
+  't': lambda n: 3 * n,
+  'd': lambda n: 2 * n,
+  'D': lambda n: n,
+  'T': lambda n: n,
+  ' ': lambda n: n,
+}
+
 def score_move(board0, board1):
-  return sum([score_word(w) for w in get_words(board1) - get_words(board0)])
+  score = 0
+  for row in [tuple(zip(row0, row1, row_s)) for row0, row1, row_s in zip(board0, board1, squares)]:
+    for t0, t1, s in row:
+      score += multipliers[s](points[t1])
+  return score
+  #(t0,t1,s,p)
+  #for row in map(lambda row: map(lambda square: square + (multiplers[square[2]](points[square[1]]),), row), 
+                 #map(lambda row: zip(row[0], row[1], row[2]), 
+                     #zip(board0, board1, squares))):
+    #print()
+    #for square in row:
+      #print(square)
+
+squares = ('T  d   T   d  T',
+           ' D   t   t   D ',
+           '  D   d d   D  ',
+           'd  D   d   D  d',
+           '    D     D    ',
+           ' t   t   t   t ',
+           '  d   d d   d  ',
+           'T  d   D   d  T',
+           '  d   d d   d  ',
+           ' t   t   t   t ',
+           '    D     D    ',
+           'd  D   d   D  d',
+           '  D   d d   D  ',
+           ' D   t   t   D ',
+           'T  d   T   d  T')
