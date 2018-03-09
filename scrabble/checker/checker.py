@@ -8,13 +8,7 @@ def words(lines):
             if len(w) > 1}
 
 def get_words(board):
-  cols = []
-  for col in range(0, 15):
-    column = []
-    for row in range(0, 15):
-      column.append(board[row][col])
-    cols.append(''.join(column))
-  return words(board) | words(cols)
+  return words(board) | words(list(map(lambda line: ''.join(line),zip(*board))))
 
 #TODO: refactor to validate board + move ((r,c), word
 def is_valid_arrangement(board):

@@ -33,27 +33,21 @@ points = {
 def score_word(word):
   return sum([points[l] for l in word])
 
-multipliers = {
-  't': lambda n: 3 * n,
-  'd': lambda n: 2 * n,
-  'D': lambda n: n,
-  'T': lambda n: n,
-  ' ': lambda n: n,
+letter_multipliers = {
+  't': 3,
+  'd': 2,
+  'D': 1,
+  'T': 1,
+  ' ': 1,
 }
 
-def score_move(board0, board1):
-  score = 0
-  for row in [tuple(zip(row0, row1, row_s)) for row0, row1, row_s in zip(board0, board1, squares)]:
-    for t0, t1, s in row:
-      score += multipliers[s](points[t1])
-  return score
-  #(t0,t1,s,p)
-  #for row in map(lambda row: map(lambda square: square + (multiplers[square[2]](points[square[1]]),), row), 
-                 #map(lambda row: zip(row[0], row[1], row[2]), 
-                     #zip(board0, board1, squares))):
-    #print()
-    #for square in row:
-      #print(square)
+word_multipliers = {
+  't': 1,
+  'd': 1,
+  'D': 2,
+  'T': 3,
+  ' ': 1,
+}
 
 squares = ('T  d   T   d  T',
            ' D   t   t   D ',
@@ -70,3 +64,47 @@ squares = ('T  d   T   d  T',
            '  D   d d   D  ',
            ' D   t   t   D ',
            'T  d   T   d  T')
+
+def get_words_and_squares(board, available_squares=squares):
+  return get_words_and_squares_from_rows(board, available_squares) \
+      + get_words_and_squares_from_rows(list(map(lambda row: ''.join(row), 
+                                                 zip(*board))), 
+                                        available_squares)
+
+def get_words_and_squares_from_rows(board, available_squares):
+  words_squares = []
+  for r in range(0, len(board)):
+    start_index = None
+    for c in range(0, len(board[r])):
+      if board[r][c] == ' ':
+        if start_index is not None:
+          if c - start_index > 1:
+            words_squares.append((board[r][start_index:c], 
+                                  available_squares[r][start_index:c]))
+        start_index = None
+      elif start_index is None:
+        start_index = c
+  return words_squares
+
+def score_move(board0, board1):
+  #[('dog', ' d '),....]
+  #TODO: exclude squares that weren't covered in this move
+  available_squares = [[s if t == ' ' else ' ' for t, s in row] for row
+                       in (zip(rb, rs) for rb, rs
+                           in zip(board0, squares))]
+  words_squares0 = get_words_and_squares(board0, available_squares)
+  words_squares1 = get_words_and_squares(board1, available_squares)
+  for ws in words_squares0:
+    words_squares1.remove(ws)
+  score = 0
+  print(words_squares1)
+  for word, sqs in words_squares1:
+    word_score = 0
+    word_multiplier = 1
+    for l, s in zip(word, sqs):
+      word_multiplier *= word_multipliers[s]
+      word_score += (points[l] * letter_multipliers[s])
+      print(l,s,word_score, word_multiplier)
+    word_score *= word_multiplier
+    score += word_score
+  return score
