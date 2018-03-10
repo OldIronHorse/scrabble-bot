@@ -4,7 +4,8 @@ from functools import partial
 from scrabble.board import new_board, add_horizontal, add_vertical
 from scrabble.scorer import score_move, score_word
 from scrabble.tiles import shake, new_bag
-from scrabble.strategies import whole_words, longest_first, shortest_first
+from scrabble.strategies import whole_words, longest_first, shortest_first, \
+  shape_first
 from scrabble.checker import scowl, is_valid_arrangement, get_words
 
 def print_board(board):
@@ -31,7 +32,7 @@ players = [{
     'name': 'Player1',
     'tiles': '',
     'score': 0,
-    'strategy': partial(whole_words, scowl(35)),
+    'strategy': partial(shape_first, scowl(35)),
     'time': 0,
     'words': [],
   },{
@@ -45,7 +46,7 @@ players = [{
     'name': 'Player3',
     'tiles': '',
     'score': 0,
-    'strategy': partial(longest_first, scowl(35)),
+    'strategy': partial(whole_words, scowl(35)),
     'time': 0,
     'words': [],
   #},{
