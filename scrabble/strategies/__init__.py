@@ -1,1 +1,1 @@
-from .basic import whole_words, whole_sequence
+from .basic import whole_words, longest_first, shortest_first 

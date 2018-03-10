@@ -31,7 +31,7 @@ points = {
 }
 
 def score_word(word):
-  return sum([points[l] for l in word])
+  return sum([points.get(l, 0) for l in word])
 
 letter_multipliers = {
   't': 3,

@@ -40,9 +40,9 @@ class TestScoreMove(TestCase):
     b0 = add_horizontal(new_board(), (7,3), 'jumps')
     # J on a double letter score, P on a double word score
     self.assertEqual(48, score_move(new_board(), b0))
-    b1 = add_vertical(b0, (5,5), 'hu an')
+    b1 = add_vertical(b0, (5,5), 'huan')
     # H & N on triple letter scores
     self.assertEqual(20, score_move(b0, b1))
-    b2 = add_vertical(b1, (4,6), 'hop y')
+    b2 = add_vertical(b1, (4,6), 'hopy')
     self.assertEqual(43, score_move(b1, b2))
 

@@ -7,21 +7,33 @@ from scrabble import InvalidTilePlacementError
 #TODO: wordtree as alternative to brute force
 #TODO: blank tile support
 
-# NOTE: This generates WAY too many possibilities to test
-def whole_sequence(wordset, board0, tiles):
-  candidate_words = {word for word 
-                     in {''.join(w) for w 
-                         in reduce(lambda acc, l: acc + list(l), 
-                                   (permutations(tiles, n) for n 
-                                    in range(1, len(tiles) + 1)), [])}}
-  print(len(candidate_words))
-  candidate_moves = all_legal_moves(wordset, board0, candidate_words)
-  print(len(candidate_moves))
-  try:
-    return highest_scoring(candidate_moves)
-  except TypeError:
-    print("no moves, returning tiles to bag")
-    return('exchange_tiles', tiles)
+def shortest_first(wordset, board0, tiles):
+  for n in range(1, len(tiles)):
+    print('n:', n)
+    candidate_words = {''.join(w) for w in permutations(tiles, n)}
+    print('candidate_words:', len(candidate_words))
+    candidate_moves = all_legal_moves(wordset, board0, candidate_words)
+    print('candidate_moves', len(candidate_moves))
+    try:
+      return highest_scoring(candidate_moves)
+    except TypeError:
+      pass
+  print("no moves, returning tiles to bag")
+  return('exchange_tiles', tiles)
+
+def longest_first(wordset, board0, tiles):
+  for n in range(len(tiles), 1, -1):
+    print('n:', n)
+    candidate_words = {''.join(w) for w in permutations(tiles, n)}
+    print('candidate_words:', len(candidate_words))
+    candidate_moves = all_legal_moves(wordset, board0, candidate_words)
+    print('candidate_moves', len(candidate_moves))
+    try:
+      return highest_scoring(candidate_moves)
+    except TypeError:
+      pass
+  print("no moves, returning tiles to bag")
+  return('exchange_tiles', tiles)
 
 def whole_words(wordset, board0, tiles):
   # whole words
@@ -31,9 +43,9 @@ def whole_words(wordset, board0, tiles):
                                    (permutations(tiles, n) for n 
                                     in range(1, len(tiles) + 1)), [])}
                      if word in wordset}
-  print(len(candidate_words))
+  print('candidate_words:', len(candidate_words))
   candidate_moves = all_legal_moves(wordset, board0, candidate_words)
-  print(len(candidate_moves))
+  print('candidate_moves', len(candidate_moves))
   try:
     return highest_scoring(candidate_moves)
   except TypeError:
@@ -44,20 +56,24 @@ def all_legal_moves(wordset, board0, candidate_words):
   candidate_moves = []
   for r in range(0, 15):
     for c in range(0, 15):
-      start = (r, c)
-      for word in candidate_words:
-        try:
-          board_h = add_horizontal(board0, start, word)
-          if is_valid_arrangement(board_h):
-            candidate_moves.append((word, start, 'add_horizontal', board_h))
-        except InvalidTilePlacementError:
-          pass
-        try:
-          board_v = add_vertical(board0, start, word)
-          if is_valid_arrangement(board_v):
-            candidate_moves.append((word, start, 'add_vertical', board_v))
-        except InvalidTilePlacementError:
-          pass
+      if board0[r][c] == ' ':
+        start = (r, c)
+        for word in candidate_words:
+          if c + len(word) < 15:
+            try:
+              board_h = add_horizontal(board0, start, word)
+              if is_valid_arrangement(board_h):
+                candidate_moves.append((word, start, 'add_horizontal', board_h))
+            except InvalidTilePlacementError:
+              pass
+          if r + len(word) < 15:
+            try:
+              board_v = add_vertical(board0, start, word)
+              if is_valid_arrangement(board_v):
+                candidate_moves.append((word, start, 'add_vertical', board_v))
+            except InvalidTilePlacementError:
+              pass
+  print(' moves before spellcheck', len(candidate_moves))
   return [(word, start, action, board, score_move(board0, board)) 
           for word, start, action, board 
           in candidate_moves 
