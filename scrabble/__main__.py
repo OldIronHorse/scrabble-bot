@@ -43,20 +43,20 @@ players = [{
     'strategy': partial(whole_words, scowl(35)),
     'time': 0,
     'words': [],
-  #},{
-    #'name': 'Player3',
-    #'tiles': '',
-    #'score': 0,
-    #'strategy': partial(shortest_first, scowl(35)),
-    #'time': 0,
-    #'words': [],
-  #},{
-    #'name': 'Player4',
-    #'tiles': '',
-    #'score': 0,
-    #'strategy': partial(whole_words, scowl(35)),
-    #'time': 0,
-    #'words': [],
+  },{
+    'name': 'Player3',
+    'tiles': '',
+    'score': 0,
+    'strategy': partial(shape_first, scowl(35), make_word_tree(scowl(35))),
+    'time': 0,
+    'words': [],
+  },{
+    'name': 'Player4',
+    'tiles': '',
+    'score': 0,
+    'strategy': partial(shortest_first, scowl(35)),
+    'time': 0,
+    'words': [],
   },
 ]
 
@@ -75,11 +75,13 @@ def update_game_player(game, player, board, word):
 def action_add_horizontal(game, player, params):
   start, word = params
   board = add_horizontal(game['board'], start, word)
+  print('move score:', score_move(game['board'], board))
   update_game_player(game, player, board, word)
 
 def action_add_vertical(game, player, params):
   start, word = params
   board = add_vertical(game['board'], start, word)
+  print('move score:', score_move(game['board'], board))
   update_game_player(game, player, board, word)
 
 def action_exchange_tiles(game, player, tiles):
@@ -89,7 +91,6 @@ def action_exchange_tiles(game, player, tiles):
   player['tiles'] = ''.join(player_tiles)
   game['bag'] = game['bag'] + tiles
   draw(game, player)
-
 
 actions = {
   'add_horizontal': action_add_horizontal,

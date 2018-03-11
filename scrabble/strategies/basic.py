@@ -9,30 +9,30 @@ from scrabble import InvalidTilePlacementError
 
 def shortest_first(wordset, board0, tiles):
   for n in range(1, len(tiles)):
-    print('n:', n)
+    #print('n:', n)
     candidate_words = {''.join(w) for w in permutations(tiles, n)}
-    print('candidate_words:', len(candidate_words))
+    #print('candidate_words:', len(candidate_words))
     candidate_moves = all_legal_moves(wordset, board0, candidate_words)
-    print('candidate_moves', len(candidate_moves))
+    #print('candidate_moves', len(candidate_moves))
     try:
       return highest_scoring(candidate_moves)
     except TypeError:
       pass
-  print("no moves, returning tiles to bag")
+  #print("no moves, returning tiles to bag")
   return('exchange_tiles', tiles)
 
 def longest_first(wordset, board0, tiles):
   for n in range(len(tiles), 1, -1):
-    print('n:', n)
+    #print('n:', n)
     candidate_words = {''.join(w) for w in permutations(tiles, n)}
-    print('candidate_words:', len(candidate_words))
+    #print('candidate_words:', len(candidate_words))
     candidate_moves = all_legal_moves(wordset, board0, candidate_words)
-    print('candidate_moves', len(candidate_moves))
+    #print('candidate_moves', len(candidate_moves))
     try:
       return highest_scoring(candidate_moves)
     except TypeError:
       pass
-  print("no moves, returning tiles to bag")
+  #print("no moves, returning tiles to bag")
   return('exchange_tiles', tiles)
 
 def whole_words(wordset, board0, tiles):
@@ -43,13 +43,13 @@ def whole_words(wordset, board0, tiles):
                                    (permutations(tiles, n) for n 
                                     in range(1, len(tiles) + 1)), [])}
                      if word in wordset}
-  print('candidate_words:', len(candidate_words))
+  #print('candidate_words:', len(candidate_words))
   candidate_moves = all_legal_moves(wordset, board0, candidate_words)
-  print('candidate_moves', len(candidate_moves))
+  #print('candidate_moves', len(candidate_moves))
   try:
     return highest_scoring(candidate_moves)
   except TypeError:
-    print("no moves, returning tiles to bag")
+    #print("no moves, returning tiles to bag")
     return('exchange_tiles', tiles)
 
 def all_legal_moves(wordset, board0, candidate_words):
@@ -73,7 +73,7 @@ def all_legal_moves(wordset, board0, candidate_words):
                 candidate_moves.append((word, start, 'add_vertical', board_v))
             except InvalidTilePlacementError:
               pass
-  print(' moves before spellcheck', len(candidate_moves))
+  #print(' moves before spellcheck', len(candidate_moves))
   return [(word, start, action, board, score_move(board0, board)) 
           for word, start, action, board 
           in candidate_moves 
@@ -83,5 +83,5 @@ def highest_scoring(candidate_moves):
   word, start, action, board, score = \
       reduce(lambda best, move: move if move[3] > best[3] else best, 
              candidate_moves)
-  print(action, start, word, score)
+  #print(action, start, word, score)
   return (action, (start, word))

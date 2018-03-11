@@ -42,7 +42,7 @@ def find_words(wordtree, fixed_letters, letters,
     return []
 
 def shape_first(wordset, wordtree, board0, tiles):
-  begin = time.time()
+  #begin = time.time()
   shapes = all_shapes[:len(tiles)]
   h_moves = [(start, length)
              for board1, start, length
@@ -57,29 +57,17 @@ def shape_first(wordset, wordtree, board0, tiles):
                          in all_starts], [])]
              if is_valid_arrangement(board1)]
   #print('h_moves:', h_moves)
-  print(time.time() - begin,'sec')
-  begin = time.time()
-  print('#h_moves:', len(h_moves))
-
+  #print(time.time() - begin,'sec')
+  #begin = time.time()
+  #print('#h_moves:', len(h_moves))
   h_moves_word = []
   for (r, c), length in h_moves:
     for word in find_words(wordtree, board0[r][c:c + length], tiles):
       h_moves_word.append((add_horizontal(board0, (r,c), word),
                           (r, c), word, 'add_horizontal'))
-      
-  #print('words_by_length:', words_by_length)
-  #h_moves_word = [(board1, start, word, 'add_horizontal')
-                  #for board1, start, word
-                  #in sum([[(add_horizontal_silent(board0, start, word), start, 
-                            #word) 
-                           #for word 
-                           #in words_by_length[length]]
-                          #for start, length 
-                          #in h_moves], [])
-                  #if get_words(board1).issubset(wordset)]
-  print(time.time() - begin,'sec')
-  begin = time.time()
-  print('#h_moves_word:', len(h_moves_word))
+  #print(time.time() - begin,'sec')
+  #begin = time.time()
+  #print('#h_moves_word:', len(h_moves_word))
   moves_scored = [((action, (start, word)), score_move(board0, board1))
                   for board1, start, word, action
                   in h_moves_word
@@ -88,14 +76,11 @@ def shape_first(wordset, wordtree, board0, tiles):
   try:
     best_move, score = reduce(lambda acc, m: m if m[1] > acc[1] else acc,
                               moves_scored)
-    print(time.time() - begin,'sec')
-    print(best_move, score)
+    #print(time.time() - begin,'sec')
+    #print(best_move, score)
     return best_move
   except TypeError:
-    print(time.time() - begin,'sec')
-    return ('exchange_tiles', tiles)
-
-  #v_moves = [(board1, start, shape) for board1 in [add_vertical(board0, start shape) for [[shape in shapes] for start in [[(r, c) for c in range(0, 15)] for r in range(0, 15)]]] if is_valid_arragement(board1)]
-  #print('v_moves:', v_moves)
+    pass
+  #print(time.time() - begin,'sec')
   return ('exchange_tiles', tiles)
 
