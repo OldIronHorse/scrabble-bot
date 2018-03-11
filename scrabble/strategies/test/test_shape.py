@@ -47,6 +47,28 @@ class TestShape(TestCase):
                                  board, 
                                  'crsezzz'))
 
+  def test_vertical_intersection(self):
+    board = ('               ',
+             '               ',
+             '               ',
+             '               ',
+             '               ',
+             '               ',
+             '               ',
+             '   jumps       ',
+             '               ',
+             '               ',
+             '               ',
+             '               ',
+             '               ',
+             '               ',
+             '               ')
+    self.assertEqual(('add_vertical', ((6, 4), 'crse')),
+                     shape_first({'jumps','curse'}, 
+                                 make_word_tree(['jumps', 'curse']),
+                                 board, 
+                                 'crsezzz'))
+
   def test_no_move(self):
     board = ('               ',
              '               ',
