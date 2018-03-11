@@ -119,6 +119,6 @@ for player in cycle(players):
       player['score'] -= score_word(player['tiles'])
       print_player(player)
       print(player['words'])
-    print(get_words(game['board']))
+    print('all words:', sorted(list(get_words(game['board']))))
     break;
 
