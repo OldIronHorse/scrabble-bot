@@ -1,6 +1,7 @@
 import time
 from itertools import cycle
 from functools import partial
+from word_tree import make_word_tree
 from scrabble.board import new_board, add_horizontal, add_vertical
 from scrabble.scorer import score_move, score_word
 from scrabble.tiles import shake, new_bag
@@ -32,23 +33,23 @@ players = [{
     'name': 'Player1',
     'tiles': '',
     'score': 0,
-    'strategy': partial(shape_first, scowl(35)),
+    'strategy': partial(shape_first, scowl(35), make_word_tree(scowl(35))),
     'time': 0,
     'words': [],
   },{
     'name': 'Player2',
     'tiles': '',
     'score': 0,
-    'strategy': partial(shortest_first, scowl(35)),
-    'time': 0,
-    'words': [],
-  },{
-    'name': 'Player3',
-    'tiles': '',
-    'score': 0,
     'strategy': partial(whole_words, scowl(35)),
     'time': 0,
     'words': [],
+  #},{
+    #'name': 'Player3',
+    #'tiles': '',
+    #'score': 0,
+    #'strategy': partial(shortest_first, scowl(35)),
+    #'time': 0,
+    #'words': [],
   #},{
     #'name': 'Player4',
     #'tiles': '',
