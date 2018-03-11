@@ -70,6 +70,10 @@ def update_game_player(game, player, board, word):
   for l in word:
     tiles.remove(l)
   player['tiles'] = ''.join(tiles)
+  if player['tiles'] == '':
+    print('*** 7 tiles played. +50 points! ***')
+    input('...')
+    player['score'] += 50
   player['words'].append(word)
 
 def action_add_horizontal(game, player, params):
@@ -119,6 +123,7 @@ for player in cycle(players):
       player['score'] -= score_word(player['tiles'])
       print_player(player)
       print(player['words'])
+      print(max(map(len, player['words'])))
     print('all words:', sorted(list(get_words(game['board']))))
     break;
 

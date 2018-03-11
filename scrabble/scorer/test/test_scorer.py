@@ -46,3 +46,8 @@ class TestScoreMove(TestCase):
     b2 = add_vertical(b1, (4,6), 'hopy')
     self.assertEqual(43, score_move(b1, b2))
 
+  def test_extend_word(self):
+    b0 = add_horizontal(new_board(), (7,4), 'jump')
+    b1 = add_horizontal(b0, (7, 8), 's')
+    self.assertEqual(16, score_move(b0, b1))
+

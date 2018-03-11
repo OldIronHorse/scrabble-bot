@@ -74,7 +74,8 @@ def all_legal_moves(wordset, board0, candidate_words):
             except InvalidTilePlacementError:
               pass
   #print(' moves before spellcheck', len(candidate_moves))
-  return [(word, start, action, board, score_move(board0, board)) 
+  return [(word, start, action, board, 
+           score_move(board0, board) + (50 if len(word) == 7 else 0)) 
           for word, start, action, board 
           in candidate_moves 
           if get_words(board).issubset(wordset)]

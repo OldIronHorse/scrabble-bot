@@ -2,6 +2,7 @@ scowls = {}
 
 def scowl(size):
   try:
+    print('scowl({}) from cache'.format(size))
     return scowls[size]
   except KeyError:
     with open('scrabble/checker/scowl_{}.lst'.format(size), 

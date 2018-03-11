@@ -68,7 +68,8 @@ def shape_first(wordset, wordtree, board0, tiles):
   v_moves_word = [(transpose(board), (c, r), word, 'add_vertical')
                   for board, (r, c), word, _action 
                   in get_h_moves_word(wordtree, transpose(board0), tiles)]
-  moves_scored = [((action, (start, word)), score_move(board0, board1))
+  moves_scored = [((action, (start, word)), 
+                   score_move(board0, board1) + (50 if len(word) == 7 else 0))
                   for board1, start, word, action
                   in h_moves_word + v_moves_word
                   if get_words(board1).issubset(wordset)
